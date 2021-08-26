@@ -1,26 +1,44 @@
 # fastapi-sample
 
+FastAPI sample app
+
+![](docs/diagram.drawio.svg)
+
 ## Requirements
 
-Python 3.7
+- Docker
 
 ## Getting Started
 
-1. Install dependencies.
-
+1. Start MySQL and Fast API
     ```
-    pip install -r requirements.txt
-    ```
-
-1. Run.
-
-    ```
-    uvicorn app:main:app --reload
+    docker compose up
     ```
 
-1. You can access to localhost:8000
+1. Create a user
 
     ```
-    curl localhost:8000
-    {"message":"Hello World"}
+    curl -X 'POST' \
+    'http://localhost:8000/users/' \
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "email": "string",
+    "password": "string"
+    }'
     ```
+
+1. Get users
+
+    ```
+    curl -X 'GET' \
+    'http://localhost:8000/users/?skip=0&limit=100' \
+    -H 'accept: application/json'
+    ```
+
+1. For more details: http://localhost:8000/docs
+
+    ![](docs/fast-api.png)
+
+# References
+- https://fastapi.tiangolo.com/tutorial/sql-databases
