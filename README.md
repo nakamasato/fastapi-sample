@@ -8,14 +8,22 @@ FastAPI sample app
 
 - Docker
 
+## Environment Variables
+
+MySQL credentials are given by environment variables:
+
+- `MYSQL_HOST`
+- `MYSQL_DATABASE`
+- `MYSQL_USER`
+- `MYSQL_PASSWORD`
 ## Getting Started
 
-1. Start MySQL and Fast API
+1. Start MySQL and Fast API.
     ```
     docker compose up
     ```
 
-1. Create a user
+1. Create a user.
 
     ```
     curl -X 'POST' \
@@ -28,7 +36,7 @@ FastAPI sample app
     }'
     ```
 
-1. Get users
+1. Get users.
 
     ```
     curl -X 'GET' \
