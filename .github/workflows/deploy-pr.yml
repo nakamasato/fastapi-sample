@@ -1,3 +1,4 @@
+#github actions 練習用
 name: deploy-pr
 
 on:
