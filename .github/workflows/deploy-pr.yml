@@ -1,3 +1,4 @@
+#　github actions 練習用
 # このWorkflowは、レクチャー内では、nakamasato/fastapi-sampleで実行したものです。
 # 実際に動かしたい場合には、以下の手順で2つのレポをForkしてから練習してください。
 # 1. https://github.com/nakamasato/fastapi-sampleをForkして自分のGitHubのアカウント以下にfastapi-sampleを持ってくる
