@@ -1,4 +1,5 @@
-#　github actions 練習用
+# github actions 練習用のyamlファイル
+# 参考 https://www.udemy.com/course/kubernetes-basics-2021/
 # このWorkflowは、レクチャー内では、nakamasato/fastapi-sampleで実行したものです。
 # 実際に動かしたい場合には、以下の手順で2つのレポをForkしてから練習してください。
 # 1. https://github.com/nakamasato/fastapi-sampleをForkして自分のGitHubのアカウント以下にfastapi-sampleを持ってくる
