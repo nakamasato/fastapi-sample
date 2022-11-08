@@ -47,7 +47,7 @@ jobs:
       - name: Checkout namamasato/kubernates-basics
         uses: actions/checkout@v2
         with:
-          repository: nakamasato/kubernetes-basics
+          repository: aka-ao/kubernetes-basics
           ref: v2.0-rc
       - name: Update manifest file
         env: 
