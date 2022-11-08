@@ -51,7 +51,7 @@ jobs:
           ref: v2.0-rc
       - name: Update manifest file
         env: 
-          YAML_PATH: 09-cicd/sample-appmanfests/deployment.yaml
+          YAML_PATH: 09-cicd/sample-app-manfests/deployment.yaml
           CONTAINER_NAME: fastapi-sample
           IMAGE_FULL_NAME: ${{needs.build-and-push-image.outputs.tags}}
         run: |
