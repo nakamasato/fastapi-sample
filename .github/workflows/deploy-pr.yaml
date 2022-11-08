@@ -44,7 +44,7 @@ jobs:
     needs: build-and-push-image
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout namamasato/kubernates-basics
+      - name: Checkout aka-ao/kubernetes-basics
         uses: actions/checkout@v2
         with:
           repository: aka-ao/kubernetes-basics
