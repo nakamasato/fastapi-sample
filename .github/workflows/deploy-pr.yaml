@@ -1,7 +1,7 @@
 name: deploy-or
 
 on:
-  pull_requests:
+  pull_request:
 
 env:
   REGISTRY: ghcr.io
