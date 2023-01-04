@@ -1,24 +1,15 @@
-# このワークフローはGitHubによって認定されていないアクションを使用します。
-# それらはサードパーティによって提供され、
-# 別個の利用規約、プライバシーポリシー、
-# ドキュメントを参照してください。
-
-# GitHub では、コミット SHA にアクションをピン留めすることが推奨されます。
-# 新しいバージョンを取得するには、SHA を更新する必要があります。
-# タグまたはブランチを参照することもできますが、アクションは警告なしに変更される可能性があります。
-
-name: Create and publish a Docker image
+name: deploy-pr
 
 on:
- push:
-   branches: ['release']
+  pull_request:
 
 env:
- REGISTRY: ghcr.io
- IMAGE_NAME: ${{ github.repository }}
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
- build-and-push-image:
+  # https://docs.github.com/ja/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#publishing-a-package-using-an-action
+  build-and-push-image:
    runs-on: ubuntu-latest
    permissions:
      contents: read
@@ -44,7 +35,7 @@ jobs:
      - name: Build and push Docker image
        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
        with:
-         context: .
+         context: app
          push: true
          tags: ${{ steps.meta.outputs.tags }}
          labels: ${{ steps.meta.outputs.labels }}
