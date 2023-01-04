@@ -58,7 +58,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: BlackJack2021/kubernetes-basics # レクチャーと同じように試したい場合には、 Forkして <your github account>/kubernetes-basics というふうに変更してください
-          ref: v2.0-rc
+          ref: master
       - name: Update manifest file
         env:
           YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
