@@ -1,4 +1,3 @@
-# PR を作成します。
 name: deploy-pr
 
 on:
