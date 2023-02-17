@@ -57,7 +57,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: nakamasato/kubernetes-basics # レクチャーと同じように試したい場合には、 Forkして <your github account>/kubernetes-basics というふうに変更してください
-          ref: v2.1.1
+          ref: main
       - name: Update manifest file
         env:
           YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
@@ -71,7 +71,7 @@ jobs:
         with:
           token: ${{ secrets.REPO_GITHUB_TOKEN }} # レクチャー内では、Personal Access Tokenを発行して fastapi-sampleレポから kubernetes-basicsレポコードをプッシュできる権限を与えました。
           title: "Update fastapi-sample"
-          base: v2.1.1
+          base: main
           draft: true
           body: |
             # Changes
