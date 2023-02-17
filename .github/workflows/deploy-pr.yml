@@ -71,7 +71,7 @@ jobs:
         with:
           token: ${{ secrets.REPO_GITHUB_TOKEN }} # レクチャー内では、Personal Access Tokenを発行して fastapi-sampleレポから kubernetes-basicsレポコードをプッシュできる権限を与えました。
           title: "Update fastapi-sample"
-          base: v2.0-rc
+          base: v2.1.1
           draft: true
           body: |
             # Changes
