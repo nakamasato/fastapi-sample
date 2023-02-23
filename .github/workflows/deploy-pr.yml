@@ -1,0 +1,78 @@
+# このWorkflowは、レクチャー内では、nakamasato/fastapi-sampleで実行したものです。
+# 実際に動かしたい場合には、以下の手順で2つのレポをForkしてから練習してください。
+# 1. https://github.com/nakamasato/fastapi-sampleをForkして自分のGitHubのアカウント以下にfastapi-sampleを持ってくる
+# 2. Forkしたfastapi-sampleにブランチを新規作成して、.github/workflows/deploy-pr.ymlというファイルにこちらのファイルを置く
+# 3. https://github.com/nakamasato/kubernetes-basicsをForkして自分のGitHubのアカウント以下にkubernetes-basicsを持ってくる
+# 4. このファイルの nakamasato/kubernetes-basics -> <your github account>/kubernetes-basicsへ変更する
+# 5. 自分のGitHubのSettings > Developer Settings > Personal Access Tokenから、Repoの権限を与えたTokenを発行し、自分のfastapi-sampleレポのSettingsからSecretsに REPO_GITHUB_TOKENという名前でTokenを登録する
+# 6. 自分のfastapi-sampleレポに.github/workflows/deploy-pr.ymlのファイルをコミット＆プッシュし、PRを作成する。
+name: deploy-pr
+
+on:
+  pull_request:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # https://docs.github.com/ja/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#publishing-a-package-using-an-action
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    outputs: # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idoutputs
+      tags: ${{ steps.meta.outputs.tags }}
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+        with:
+          context: app
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+  update-manifest:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout nakamasato/kubernetes-basics #https://github.com/nakamasato/kubernetes-basics/blob/v2.0-rc/09-cicd/sample-app-manifests/deployment.yaml
+        uses: actions/checkout@v2
+        with:
+          repository: nakamasato/kubernetes-basics # レクチャーと同じように試したい場合には、 Forkして <your github account>/kubernetes-basics というふうに変更してください
+          ref: v2.0-rc
+      - name: Update manifest file
+        env:
+          YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
+          CONTAINER_NAME: fastapi-sample
+          IMAGE_FULL_NAME: ${{ needs.build-and-push-image.outputs.tags }} # pull_request -> ghcr.io/nakamasato/fastapi-sample:pr-{pull-request-num}
+        run: |
+          yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
+          cat ${YAML_PATH}
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.REPO_GITHUB_TOKEN }} # レクチャー内では、Personal Access Tokenを発行して fastapi-sampleレポから kubernetes-basicsレポコードをプッシュできる権限を与えました。
+          title: "Update fastapi-sample"
+          base: v2.0-rc
+          draft: true
+          body: |
+            # Changes
+            - Update `fastapi-sample` image
