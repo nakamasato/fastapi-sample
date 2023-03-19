@@ -19,6 +19,7 @@ jobs:
 
       - name: test hello world
         run: |
+          curl -s localhost:8000 | jq -r .message
           test "$(curl -s localhost:8000 | jq -r .message)" = "Hello World"
 
       - name: test len(users) == 0
