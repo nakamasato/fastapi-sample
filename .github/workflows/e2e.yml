@@ -15,7 +15,7 @@ jobs:
         run: docker compose up -d
 
       - name: wait until ready
-        run: until [ $(docker compose ps | grep -c healthy) -eq 2 ]; do echo docker compose ps; sleep 1;  done
+        run: until [ $(docker compose ps | grep -c healthy) -eq 2 ]; do docker compose ps; sleep 1;  done
 
       - name: test hello world
         run: |
