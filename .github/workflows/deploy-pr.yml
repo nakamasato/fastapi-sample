@@ -67,5 +67,4 @@ jobs:
           base: v2.0-rc # ブランチ名
           draft: true
           body: |
-            # Changes
             - Update `fastapi-sample` image
