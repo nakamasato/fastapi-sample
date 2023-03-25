@@ -24,9 +24,10 @@ jobs:
      - name: Log in to the Container registry
        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
        with:
-         registry: ${{ env.REGISTRY }}
-         username: ${{ github.actor }}
-         password: ${{ secrets.GITHUB_TOKEN }}
+         "registry=$registry" >> .env
+         #registry: ${{ env.REGISTRY }}
+         #username: ${{ github.actor }}
+         #password: ${{ secrets.GITHUB_TOKEN }}
 
      - name: Extract metadata (tags, labels) for Docker
        id: meta
@@ -46,7 +47,7 @@ jobs:
    runs-on: ubuntu-image
    steps:
      - name: Checkout usacoasts/kubernetes-basics #https://github.com/usacoasts/kubernetes-basics/blob/master/09-cicd/sample-app-manifests/deployment.yaml
-       uses: actions/checkout@v2
+       uses: actions/checkout@v3
        with:
          repository: usacoasts/kubernetes-basics
          ref: v2.0-rc # ブランチ名
@@ -56,10 +57,10 @@ jobs:
          CONTAINER_NAME: fastapi-sample
          IMAGE_FULL_NAME: ${{ needs.build-and-push-image.outputs.tags }}
        run: |
-         # yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)||=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
-         # cat ${YAML_PATH}
-         # yq e -i "(.spec.template.spec.containers[]|select(.name == \"CONTAINER_NAME=$CONTAINER_NAME" >> .env\").image)||=\"IMAGE_FULL_NAME=$IMAGE_FULL_NAME" >> .env"" "YAML_PATH=$YAML_PATH" >> .env"
-         # cat "YAML_PATH=$YAML_PATH" >> .env"
+         yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)||=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
+         cat ${YAML_PATH}
+         #yq e -i "(.spec.template.spec.containers[]|select(.name == \"CONTAINER_NAME=$CONTAINER_NAME" >> .env\").image)||=\"IMAGE_FULL_NAME=$IMAGE_FULL_NAME" >> .env"" "YAML_PATH=$YAML_PATH" >> .env"
+         #cat "YAML_PATH=$YAML_PATH" >> .env"
      - name: Create PR
        uses: peter-evans/create-pull-request@v3
        with:
