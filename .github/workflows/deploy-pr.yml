@@ -56,8 +56,10 @@ jobs:
          CONTAINER_NAME: fastapi-sample
          IMAGE_FULL_NAME: ${{ needs.build-and-push-image.outputs.tags }}
        run: |
-         yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)||=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
-         cat ${YAML_PATH}
+         # yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)||=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
+         # cat ${YAML_PATH}
+         yq e -i "(.spec.template.spec.containers[]|select(.name == \"CONTAINER_NAME=$CONTAINER_NAME" >> .env\").image)||=\"IMAGE_FULL_NAME=$IMAGE_FULL_NAME" >> .env"" "YAML_PATH=$YAML_PATH" >> .env"
+         cat "YAML_PATH=$YAML_PATH" >> .env"
      - name: Create PR
        uses: peter-evans/create-pull-request@v3
        with:
