@@ -10,7 +10,10 @@ env:
 jobs:
  # https://docs.github.com/ja/packages/managing-github-packages-using-github-actions-workflows/publishing-and-installing-a-package-with-github-actions#publishing-a-package-using-an-action
  build-and-push-image:
-   runs-on: ubuntu-latest
+   # https://dev.classmethod.jp/articles/check-runs-on-params-on-workflow/
+   # https://github.blog/changelog/2022-11-09-github-actions-ubuntu-latest-workflows-will-use-ubuntu-22-04/
+   # runs-on: ubuntu-latest
+   runs-on: ubuntu-18.04
    outputs: # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idoutputs
      tags: ${{ steps.meta.outputs.tags }}
    permissions:
