@@ -62,9 +62,9 @@ jobs:
      - name: Create PR
        uses: peter-evans/create-pull-request@v3
        with:
-          token: ${{ secrets.REPO_GITHUB_TOKEN }}
+          token: ${{ secrets.REPO_GITHUB_TOKEN }} # token
           title: "Update fastapi-sample"
-          base: v2.0-rc
+          base: v2.0-rc # ブランチ名
           draft: true
           body: |
             # Changes
