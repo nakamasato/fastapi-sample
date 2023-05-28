@@ -1,6 +1,6 @@
 # fastapi-sample
 
-FastAPI sample app
+FastAPI sample app fork
 
 ![](docs/diagram.drawio.svg)
 
