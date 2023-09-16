@@ -49,28 +49,28 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-  # update-manifest:
-  #   needs: build-and-push-image
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout  #https://github.com/nakamasato/kubernetes-basics/blob/v2.0-rc/09-cicd/sample-app-manifests/deployment.yaml
-  #       uses: actions/checkout@v2
-  #       with:
-  #         ref: update-2023
-  #     - name: Update manifest file
-  #       env:
-  #         YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
-  #         CONTAINER_NAME: fastapi-sample
-  #         IMAGE_FULL_NAME: ${{ needs.build-and-push-image.outputs.tags }} # pull_request -> ghcr.io/nakamasato/fastapi-sample:pr-{pull-request-num}
-  #       run: |
-  #         yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
-  #         cat ${YAML_PATH}
-  #     - name: Create PR
-  #       uses: peter-evans/create-pull-request@v3
-  #       with:
-  #         title: "Update fastapi-sample"
-  #         base: v2.0-rc
-  #         draft: true
-  #         body: |
-  #           # Changes
-  #           - Update `fastapi-sample` image
+  update-manifest:
+    needs: build-and-push-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: update-2023 # target branch
+      - name: Update manifest file
+        env:
+          YAML_PATH: 09-cicd/sample-app-manifests/deployment.yaml
+          CONTAINER_NAME: fastapi-sample
+          IMAGE_FULL_NAME: ${{ needs.build-and-push-image.outputs.tags }} # pull_request -> ghcr.io/nakamasato/fastapi-sample:pr-{pull-request-num}
+        run: |
+          yq e -i "(.spec.template.spec.containers[]|select(.name == \"${CONTAINER_NAME}\").image)|=\"${IMAGE_FULL_NAME}\"" ${YAML_PATH}
+          cat ${YAML_PATH}
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Update fastapi-sample"
+          base: update-2023 # target branch
+          draft: true
+          body: |
+            # Changes
+            - Update `fastapi-sample` image
