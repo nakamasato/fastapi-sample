@@ -55,7 +55,7 @@ jobs:
   #   steps:
   #     - name: Checkout  #https://github.com/nakamasato/kubernetes-basics/blob/v2.0-rc/09-cicd/sample-app-manifests/deployment.yaml
   #       uses: actions/checkout@v2
-  #       with:          
+  #       with:
   #         ref: update-2023
   #     - name: Update manifest file
   #       env:
