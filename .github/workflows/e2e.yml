@@ -9,10 +9,8 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
-      - name: docker compose build
-        run: docker compose build
 
       - name: run db & api with docker compose
         run: docker compose up -d
