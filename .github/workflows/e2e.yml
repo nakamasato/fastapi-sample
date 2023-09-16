@@ -11,7 +11,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-
       - name: run db & api with docker compose
         run: docker compose up -d
 
