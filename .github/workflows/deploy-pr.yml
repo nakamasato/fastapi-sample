@@ -44,6 +44,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: update-2023 # target branch
 
       - name: Update fastapi-sample image
         env:
@@ -51,9 +53,12 @@ jobs:
         run: |
           yq -i "(.spec.template.spec.containers[] |select(.name == \"fastapi-sample\")).image |= \"$IMAGE_FULL_NAME\"" manifests/fastapi-sample/deployment.yaml
 
-      - name: Commit & Push
-        run: |
-          git config --global user.email "githubactions@github.com"
-          git config --global user.user "GitHub Actions"
-          git commit -am "chore(k8s): update fastapi-sample image"
-          git push
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: "Update fastapi-sample"
+          base: update-2023 # target branch
+          draft: true
+          body: |
+            # Changes
+            - Update `fastapi-sample` image to ${{ needs.buid-and-push-image.outputs.IMAGE_FULL_NAME }}
