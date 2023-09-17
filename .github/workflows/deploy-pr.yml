@@ -7,6 +7,8 @@ env:
 
 jobs:
   buid-and-push-image:
+    outputs:
+      IMAGE_FULL_NAME: ${{ steps.meta.outputs.tags }}
     permissions:
       packages: write
     runs-on: ubuntu-latest
@@ -35,3 +37,23 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  update-kubernetes-manifest:
+    needs: [buid-and-push-image]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update fastapi-sample image
+        env:
+          IMAGE_FULL_NAME: ${{ needs.buid-and-push-image.outputs.IMAGE_FULL_NAME }}
+        run: |
+          yq -i "(.spec.template.spec.containers[] |select(.name == \"fastapi-sample\")).image |= \"$IMAGE_FULL_NAME\"" manifests/fastapi-sample/deployment.yaml
+
+      - name: Commit & Push
+        run: |
+          git config --global user.email "githubactions@github.com"
+          git config --global user.user "GitHub Actions"
+          git commit -am "chore(k8s): update fastapi-sample image"
+          git push
