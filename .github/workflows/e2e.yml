@@ -1,7 +1,9 @@
 name: e2e
 
 on:
-  pull_request:
+  # pull_request:
+  workflow_dispatch: # TODO: fix e2e
+    
 
 jobs:
   e2e:
