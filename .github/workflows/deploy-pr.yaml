@@ -1,11 +1,13 @@
 name: deploy-pr
 
+# github acrionsが動作する対象のブランチを設定
 on:
   pull_request:
     paths:
       - "app/**"
       - .github/workflows/deploy-pr.yaml
 
+# 実際のjobを定義
 jobs:
   build-and-push-image: 
     runs-on: ubuntu-latest
