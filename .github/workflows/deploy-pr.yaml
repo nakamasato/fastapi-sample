@@ -1,0 +1,35 @@
+name: deploy-pr
+
+on:
+  pull_request:
+    paths:
+      - "app/**"
+      - .github/workflows/deploy-pr.yaml
+
+jobs:
+  build-and-push-image: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+
+      - name: Log in to GitHub Container resistory
+        uses: docker/login-actions@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secret.GITHUB_TOKEN }}
+
+      - name: build and push
+        uses: docker-build-push-action@v5
+        with:
+          context: app
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
