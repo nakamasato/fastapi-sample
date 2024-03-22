@@ -1,4 +1,4 @@
-asgiref==3.4.1
+asgiref==3.8.1
 click==8.0.1
 fastapi==0.68.1
 greenlet==1.1.1
