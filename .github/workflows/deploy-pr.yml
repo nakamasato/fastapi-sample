@@ -1,0 +1,35 @@
+  name: deploy-pr
+
+  on:
+    pull_request:
+      paths:
+        - 'app/**'
+        - .github/workflows/deploy-pr.yml
+  
+  jobs:
+    build-and-push-image:
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name:  Docker meta
+          id: meta
+          uses: docker/metadata-action@v5
+          with:
+            images: ghcr.io/Nun05/fastapi-sample
+
+        - name: Log in to Github container registry
+          uses: deckert/login-action@v3
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+  
+        - name: Build and push
+          uses: docker/bulid-push-action@v5
+          with:
+            context: app
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }}
