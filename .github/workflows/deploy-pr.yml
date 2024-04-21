@@ -6,6 +6,9 @@
         - 'app/**'
         - .github/workflows/deploy-pr.yml
   
+  env:
+    REGISTRY: ghcr.io
+  
   jobs:
     build-and-push-image:
       runs-on: ubuntu-latest
@@ -17,12 +20,12 @@
           id: meta
           uses: docker/metadata-action@v5
           with:
-            images: ghcr.io/Nun05/fastapi-sample
+            images: ${{ env.REGISTRY }}/${{ github.repository }} #ghcr.io/Nun05/fastapi-sample
 
         - name: Log in to Github container registry
-          uses: deckert/login-action@v3
+          uses: decker/login-action@v3
           with:
-            registry: ghcr.io
+            registry: ${{ env.REGISTRY }}
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
   
