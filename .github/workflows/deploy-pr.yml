@@ -23,16 +23,27 @@
             images: ${{ env.REGISTRY }}/${{ github.repository }} #ghcr.io/Nun05/fastapi-sample
 
         - name: Log in to Github container registry
-          uses: decker/login-action@v3
+          uses: docker/login-action@v3
           with:
             registry: ${{ env.REGISTRY }}
             username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }}
   
         - name: Build and push
-          uses: docker/bulid-push-action@v5
+          uses: docker/build-push-action@v5
           with:
             context: app
             push: true
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
+
+    update-kubernetes-manifest:
+      runs-on: ubuntu-latest
+      needs: [build-and-push-image]
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Update fastapi-sample image
+          run: |
+            yq 
