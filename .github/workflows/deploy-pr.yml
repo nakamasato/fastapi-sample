@@ -51,7 +51,7 @@ jobs:
         run: |
           yq -i "(.spec.template.spec.containers[] | select(.name==\"firstapi-sample\")).image = \"$IMAGE_FULL_NAME\"" manifests/fastapi-sample/deployment.yaml
 
-      - name: Create PR aaaaaaaaa
+      - name: Create PR
         uses: peter-evans/create-pull-request@v5
         with:
           base: main
