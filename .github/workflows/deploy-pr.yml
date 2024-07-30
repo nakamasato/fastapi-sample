@@ -10,6 +10,8 @@ env:
   REGISTORY: ghcr.io
 jobs:
   build-and-push-image:
+    outputs:
+      IMAGE_FULL_NAME: ${{ steps.meta.outputs.tags }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -35,3 +37,26 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  update-kubernetes-manifest:
+    runs-on: ubuntu-latest
+    needs: [build-and-push-image]
+    steps:
+      - name: Checkout repositry
+        uses: actions/checkout@v4
+
+      - name: Update fastapi-sample image
+        env:
+          IMAGE_FULL_NAME: ${{needs.build-and-push-image.outputs.IMAGE_FULL_NAME}}
+        run: |
+          yq -i "(.spec.template.spec.containers[] | slect(.name==\"firstapi-sample\")).image = \"$IMAGE_FULL_NAME\"" manifests/fastapi-sample/deployment.yaml
+
+      - name: Create PR
+        uses: peter-evans/create-pull-request@v5
+        wish:
+          base: main
+          title: 'update fastapi-sample'
+          draft: true
+          body: |
+            #changes
+            - update `fastapi-sample` image to ${{needs.build-and-push-image.outputs.IMAGE_FULL_NAME}}
