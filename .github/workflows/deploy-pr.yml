@@ -1,0 +1,35 @@
+name: deploy-pr
+on: 
+  pull_request:
+    paths: 
+      - 'app/**'
+      - .github/workflows/deploy-pr.yml
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  #githubが提供するcheckout 
+
+      - name: Docker met
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{emv.REGISTRY}}/${{github.repository}} 
+
+      - name: Log in to Git Hub Container Resistory # GitHUb Crへのログイン
+        uses: docker/login-action@v3
+        with:
+          registry: ${{emv.REGISTRY}}
+          username: ${{github.actor}}
+          password: ${{secrets.GITHUB_TOKEN}}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with: 
+          context: app
+          push: true
+          tags: ${{steps.meta.outputs.tags}}    # pr番号
+          labels: ${{steps.meta.outputs.labels}} 
