@@ -21,7 +21,6 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ github.repository }} # ghcr.io/nakamasato/fastapi-sample
-
       - name: Log in to GitHub container registry
         uses: docker/login-action@v3
         with:
@@ -36,3 +35,4 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          
