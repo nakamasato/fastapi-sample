@@ -29,7 +29,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push1
+      - name: Build and push11
         uses: docker/build-push-action@v5
         with:
           context: app
