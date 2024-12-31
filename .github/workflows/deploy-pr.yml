@@ -13,7 +13,7 @@ jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repositiry
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Docker meta
@@ -29,7 +29,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and pushr
+      - name: Build and push1
         uses: docker/build-push-action@v5
         with:
           context: app
