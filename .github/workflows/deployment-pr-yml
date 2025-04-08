@@ -1,0 +1,15 @@
+name: deploy-pr
+
+on:
+  push:
+    paths:
+      - 'app/**'
+      - .github/workflows/deployment-pr.yml
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
