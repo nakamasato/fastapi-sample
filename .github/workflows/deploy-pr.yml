@@ -1,0 +1,4 @@
+name: deploy-pr
+
+on:
+  pull_request:  
