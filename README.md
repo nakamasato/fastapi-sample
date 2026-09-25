@@ -8,6 +8,27 @@ FastAPI sample app
 
 - Docker
 
+## Versions
+
+| Component | Version |
+|---|---|
+| Python | 3.14 |
+| uv | 0.12.19 |
+| FastAPI | 0.141.1 |
+| Pydantic | 2.13.5 |
+| SQLAlchemy | 2.1.0 |
+| Uvicorn | 0.53.0 |
+| PyMySQL | 1.2.3 |
+| MySQL | 8 |
+
+Dependencies are managed by [uv](https://docs.astral.sh/uv/) (`app/pyproject.toml` and `app/uv.lock`). To add or upgrade a package:
+
+```
+cd app
+uv add <package>        # add
+uv lock --upgrade       # upgrade all
+```
+
 ## Environment Variables
 
 MySQL credentials are given by environment variables:
