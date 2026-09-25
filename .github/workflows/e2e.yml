@@ -1,8 +1,8 @@
 name: e2e
 
 on:
-  # pull_request:
-  workflow_dispatch: # TODO: fix e2e
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   e2e:
@@ -10,13 +10,20 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       - name: run db & api with docker compose
         run: docker compose up -d
 
       - name: wait until ready
-        run: until [ $(docker compose ps | grep -c healthy) -eq 2 ]; do docker compose ps; sleep 1;  done
+        run: |
+          for i in $(seq 1 60); do
+            if curl -sf http://localhost:8000/ > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          docker compose ps
+          docker compose logs
+          exit 1
 
       - name: test hello world
         run: |
