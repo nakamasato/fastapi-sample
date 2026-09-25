@@ -7,12 +7,17 @@ on:
 jobs:
   e2e:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        mysql-version: ["8.3", "8"] # "8" tracks the latest MySQL 8.x (currently 8.4 LTS)
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
       - name: run db & api with docker compose
+        env:
+          MYSQL_VERSION: ${{ matrix.mysql-version }}
         run: docker compose up -d
 
       - name: wait until ready
