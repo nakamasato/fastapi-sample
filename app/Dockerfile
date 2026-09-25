@@ -6,6 +6,7 @@ RUN apk --update add \
     linux-headers \
     build-base \
     libffi-dev \
+    openssl-dev \
     bash
 COPY ./ /app
 WORKDIR /app
