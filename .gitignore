@@ -1,3 +1,10 @@
 .python-version
 __pycache__
 venv
+.venv
+
+# Claude Code (local only)
+.claude/settings.local.json
+.claude/worktrees/
+.cc-writes/
+CLAUDE.local.md
