@@ -3,7 +3,7 @@ services:
     image: mysql:${MYSQL_VERSION:-8}
     restart: always
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
       timeout: 45s
       interval: 5s
       retries: 20
