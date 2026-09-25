@@ -13,3 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v11
+        with:
+          exempt-issue-labels: pinned
+          exempt-pr-labels: pinned
