@@ -1,8 +1,8 @@
 name: e2e
 
 on:
-  # pull_request:
-  workflow_dispatch: # TODO: fix e2e
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   e2e:
@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       - name: run db & api with docker compose
         run: docker compose up -d
