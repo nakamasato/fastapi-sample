@@ -1,5 +1,5 @@
 FROM python:3.14-slim
-COPY --from=ghcr.io/astral-sh/uv:0.12.19 /uv /bin/uv
+COPY --from=ghcr.io/astral-sh/uv:0.13.0 /uv /bin/uv
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 # docker-compose bind-mounts ./app over /app, so install into the system interpreter instead of /app/.venv
